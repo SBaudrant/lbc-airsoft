@@ -1,0 +1,16 @@
+# Ignore configuration files that may contain sensitive information.
+sites/*/*settings*.php
+sites/example.sites.php
+
+# Ignore paths that contain generated content.
+files/
+sites/*/files
+sites/*/private
+sites/*/translations
+
+sites/*/settings*.php
+sites/*/services*.yml
+
+/vendor/
+
+/node_modules/*

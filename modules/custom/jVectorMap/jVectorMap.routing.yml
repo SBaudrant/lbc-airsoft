@@ -1,0 +1,15 @@
+jVectorMap.regionsMap:
+  path: '/regionsMap'
+  defaults:
+    _controller: '\Drupal\jVectorMap\Controller\JVectorMapController::regionsMap'
+    _title: 'Map regions'
+  requirements:
+    _permission: 'access regions Map'
+
+jVectorMap.departementsMap:
+  path: '/departementsMap'
+  defaults:
+    _controller: '\Drupal\jVectorMap\Controller\JVectorMapController::departementsMap'
+    _title: 'Map departements'
+  requirements:
+    _permission: 'access departements Map'
