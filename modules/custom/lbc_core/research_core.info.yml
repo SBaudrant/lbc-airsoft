@@ -1,0 +1,7 @@
+name: research_core
+description: 'research_core'
+package: lbc-airsoft
+
+type: module
+core: 8.x
+

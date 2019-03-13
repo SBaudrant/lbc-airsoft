@@ -1,0 +1,16 @@
+<?php
+
+function jVectorMap_theme($existing, $type, $theme, $path) {
+  return [
+    'jVectorMap_tpl' => [
+      'variables' => [
+        'area' => NULL,
+        'load' => NULL
+      ],
+    ],
+  ];
+}
+
+function jVectorMap_page_attachments(array &$attachements){
+  $attachments['#attached']['library'][] = 'jVectorMap/jVectorMap';
+}

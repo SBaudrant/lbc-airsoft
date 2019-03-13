@@ -1,0 +1,9 @@
+name: jVectorMap
+description: 'Display jVectorMap for France'
+package: jVectorMap
+
+type: module
+core: 8.x
+
+libraries:
+  - jVectorMap/jVectorMap
