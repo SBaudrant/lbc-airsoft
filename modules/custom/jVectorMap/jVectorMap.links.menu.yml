@@ -1,0 +1,15 @@
+jVectorMap.departementsmenu:
+  title: 'Rechercher par département'
+  description: 'Rechercher par départements'
+  parent: main
+  menu_name: main
+  route_name: jVectorMap.departementsMap
+  weight: 100
+
+jVectorMap.regionsmenu:
+  title: 'Rechercher par region'
+  description: 'Rechercher par regions'
+  parent: main
+  menu_name: main
+  route_name: jVectorMap.regionsMap
+  weight: 100

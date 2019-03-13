@@ -1,0 +1,15 @@
+jVectorMap:
+  version: 1.x
+  js:
+    assets/js/jvectormap.min.js: {}
+    assets/js/jvectormap-fr_regions-mill.js: {}
+    assets/js/jvectormap-fr-mill.js: {}
+    assets/js/custom.js: {}
+  css:
+    theme:
+      assets/css/jvectormap.css: {}
+      assets/css/style.css: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
