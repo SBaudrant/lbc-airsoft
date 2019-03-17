@@ -5,6 +5,3 @@ package: lbc-airsoft
 type: module
 core: 8.x
 
-libraries:
-  - lbc_core/research-core
-  - research_core/research-core
