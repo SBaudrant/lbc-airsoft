@@ -1,9 +1,6 @@
 research_core.research:
-  path: '/research/{type}/{regions}'
+  path: '/research'
   defaults:
     _controller: '\Drupal\research_core\Controller\Research_coreController::content'
-    _title: 'Research product by type and by places'
-    type: "all"
-    regions: "all"
   requirements:
     _permission: 'access research'
