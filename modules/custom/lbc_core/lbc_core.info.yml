@@ -1,0 +1,10 @@
+name: lbc_core
+description: 'lbc_core'
+package: lbc-airsoft
+
+type: module
+core: 8.x
+
+libraries:
+  - lbc_core/research
+  - lbc_core/annonceform

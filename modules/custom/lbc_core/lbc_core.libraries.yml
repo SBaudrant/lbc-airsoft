@@ -1,0 +1,19 @@
+research:
+  version: 1.x
+  js:
+    assets/js/custom.js: {}
+  css:
+    theme:
+      assets/css/style.css: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+annonceform:
+  version: 1.x
+  js:
+    assets/js/annonceform.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

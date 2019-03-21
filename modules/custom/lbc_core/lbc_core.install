@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the hello module.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+function lbc_core_schema() {
+    // TO DO
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function lbc_core_uninstall() {
+  // TO DO
+}

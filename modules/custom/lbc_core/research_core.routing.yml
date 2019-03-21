@@ -1,6 +1,0 @@
-research_core.research:
-  path: '/research'
-  defaults:
-    _controller: '\Drupal\research_core\Controller\Research_coreController::content'
-  requirements:
-    _permission: 'access research'
