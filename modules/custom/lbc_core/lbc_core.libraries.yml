@@ -12,6 +12,7 @@ research:
 annonceform:
   version: 1.x
   js:
+    https://maps.googleapis.com/maps/api/js?libraries=places&amp;&key=AIzaSyCTo5ergm8jxqWAfLRh_4hrGHZWzgRtFlg: { type: external, minified: true}
     assets/js/annonceform.js: {}
   dependencies:
     - core/drupal

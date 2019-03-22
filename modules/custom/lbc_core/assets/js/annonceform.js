@@ -1,17 +1,13 @@
 (function ($, Drupal) {
   'use strict';
-  
+
   console.log('toto')
-  function delay(callback, ms) {
-    let timer = 0;
-    return function() {
-      let context = this, args = arguments;
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        callback.apply(context, args);
-      }, ms || 0);
-    };
-  }
+  var componentForm = {
+    administrative_area_level_1: 'long_name',
+    administrative_area_level_2: 'long_name',
+    postal_code: 'short_name',
+    locality: 'long_name'
+  };
 
   function initializeAutocomplete(id) {
     var element = document.getElementById(id);
@@ -25,13 +21,17 @@
   function onPlaceChanged() {
     var place = this.getPlace();
 
+    //reset des champs
+    for (var component in componentForm) {
+      document.getElementById(component).value = '';
+      document.getElementById(component).disabled = false;
+    }
+
     for (var i in place.address_components) {
-      var component = place.address_components[i];
-      for (var j in component.types) {
-        var type_element = document.getElementById(component.types[j]);
-        if (type_element) {
-          type_element.value = component.long_name;
-        }
+      var addressType = place.address_components[i].types[0];
+      if (componentForm[addressType]) {
+        var val = place.address_components[i][componentForm[addressType]];
+        document.getElementById(addressType).value = val;
       }
     }
 
@@ -43,7 +43,8 @@
 
   // Initialisation du champs autocomplete
   google.maps.event.addDomListener(window, 'load', function() {
-    initializeAutocomplete('ville_autocomplete_address');
+    //initializeAutocomplete('locality');
+    initializeAutocomplete('postal_code');
   });
 
 })(jQuery, Drupal);

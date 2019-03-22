@@ -75,7 +75,7 @@ class AnnonceForm extends ConfigFormBase {
       '#title'  => $this->t('City'),
       '#required' => TRUE,
       '#attributes' => [
-        'id' => ['ville_autocomplete_address']
+        'id' => ['locality']
       ],
       '#prefix' => '<span id="error-message-ville"></span>',
     ];
@@ -83,37 +83,35 @@ class AnnonceForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title'  => $this->t('Code postal'),
       '#required' => TRUE,
-      '#attributes' => ['id' => ['ville_autocomplete_address'] ],
-      '#prefix' => '<span id="error-message-ville"></span>',
+      '#attributes' => [
+        'id' => ['postal_code']
+      ],
+      '#prefix' => '<span id="error-message-code-postal"></span>',
     ];
     $form['departement'] = [
       '#type' => 'textfield',
       '#title'  => $this->t('Departement'),
       '#required' => TRUE,
+      '#attributes' => ['id' => ['administrative_area_level_2'] ],
       '#prefix' => '<span id="error-message-departement"></span>',
     ];
     $form['region'] = [
       '#type' => 'textfield',
       '#title'  => $this->t('Region'),
       '#required' => TRUE,
+      '#attributes' => ['id' => ['administrative_area_level_1'] ],
       '#prefix' => '<span id="error-message-region"></span>',
     ];
     $form['latitude'] = [
       '#type' => 'textfield',
       '#required' => TRUE,
-      '#ajax' => [
-        'callback' => [$this, 'AjaxValidateAutocompleteLocation'],
-        'event' => 'keyup',
-      ],
+      '#attributes' => ['id' => ['latitude'] ],
       //'#attributes' => array( "class" => array("hidden") ),
     ];
     $form['longitude'] = [
       '#type' => 'textfield',
       '#required' => TRUE,
-      '#ajax' => [
-        'callback' => [$this, 'AjaxValidateAutocompleteLocation'],
-        'event' => 'keyup',
-      ],
+      '#attributes' => ['id' => ['longitude'] ],
       //'#attributes' => array( "class" => array("hidden") ),
     ];
 
