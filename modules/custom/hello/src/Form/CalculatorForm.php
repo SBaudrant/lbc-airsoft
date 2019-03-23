@@ -119,7 +119,7 @@ class CalculatorForm extends FormBase {
 
     if (is_numeric($form_state->getValue($field))) {
       $css = ['border' => '2px solid green'];
-      $message = $this->t('OK!');
+      $message = $this->t('');
     } else {
       $css = ['border' => '2px solid red'];
       $message = $this->t('%field must be numeric!', ['%field' => $form[$field]['#title']]);
