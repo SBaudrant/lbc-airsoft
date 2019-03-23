@@ -1,0 +1,13 @@
+lbc_core.research:
+  path: '/research'
+  defaults:
+    _controller: '\Drupal\lbc_core\Controller\ResearchController::content'
+  requirements:
+    _permission: 'access research'
+lbc_core.createannonce:
+  path: '/annonce/create'
+  defaults:
+    _title: 'Créez votre annonce'
+    _form: '\Drupal\lbc_core\Form\AnnonceForm'
+  requirements:
+    _permission: 'access createannonce'

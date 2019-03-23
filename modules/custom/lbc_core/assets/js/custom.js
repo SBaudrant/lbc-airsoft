@@ -1,6 +1,8 @@
 (function ($, Drupal) {
   'use strict';
 
+  console.log("dans custom")
+
   var listMode = localStorage.getItem("mode");
   if(listMode === "list"){
     $('.wrapper').addClass('list-mode');
@@ -17,4 +19,3 @@
   });
 
 })(jQuery, Drupal);
-

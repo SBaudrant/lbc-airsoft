@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\research_core\Controller;
+namespace Drupal\lbc_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\user\UserInterface;
@@ -8,25 +8,10 @@ use Drupal\user\UserInterface;
 /**
  *
  */
-class Research_coreController extends ControllerBase {
+class ResearchController extends ControllerBase {
 
   public function content()
   {
-    // $node_types = $this->entityTypeManager()->getStorage('node_type')->loadMultiple();
-    // var_dump($node_types);
-    // $item_list = [];
-    // foreach ($node_types as $node_type) {
-    //   $url = new Url('hello.hello.node_list', ['type' => $node_type->id()]);
-    //   $item_list[] = new Link($node_type->label(), $url);
-    // }
-    // $node_type_list = [
-    //   '#theme' => 'item_list',
-    //   '#items' => $item_list,
-    //   '#title' => $this->t('Filter by node types'),
-    // ];
-
-
-
     $query = $this->entityTypeManager()->getStorage('node')->getQuery();
     // Si on a un argument dans l'URL, on ne cible que les noeuds correspondants.
     $query->condition('type', 'annonce');
@@ -61,6 +46,18 @@ class Research_coreController extends ControllerBase {
       $query->condition('field_prix', $prixMax , "<" );
     }
 
+    if( $term  = \Drupal::request()->query->get('term') ){
+      $query->condition('title', "%".$term."%" , "LIKE" );
+      if( ! $onlytitle  = \Drupal::request()->query->get('onlytitle') ){
+        $query->condition('body', "%".$term."%" , "LIKE" );
+      }
+    }
+
+    if( $tags  = \Drupal::request()->query->get('type') ){
+      $query->condition('field_annonce_tags', $tags , "IN" );
+    }
+
+
     // On construit une requête paginée.
     $nids = $query->pager(10)->execute();
     // Charge les noeuds correspondants au résultat de la requête.
@@ -71,6 +68,9 @@ class Research_coreController extends ControllerBase {
       $items[] = $node->toLink();
     }
 
+    //Get reserch form
+    //$form = \Drupal::formBuilder()->getForm('Drupal\lbc_core\Form\ResearchForm');
+
     $list = [
       '#theme' => 'annonces_list',
       '#annonces' => $nodes,
@@ -78,11 +78,12 @@ class Research_coreController extends ControllerBase {
 
     // Render array pour la pagination.
     $pager = ['#type' => 'pager'];
+    $pager2 = ['#type' => 'pager'];
 
     return [
       'pager' => $pager,
       'list'  => $list,
-      'pager' => $pager,
+      'pager' => $pager2,
     ];
   }
 }
