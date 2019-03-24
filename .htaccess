@@ -27,6 +27,8 @@ AddEncoding gzip svgz
 # Drupal\Core\DrupalKernel::bootEnvironment() for settings that can be
 # changed at runtime.
 
+
+
 # PHP 5, Apache 1 and 2.
 <IfModule mod_php5.c>
   php_value assert.active                   0
@@ -135,3 +137,4 @@ AddEncoding gzip svgz
   # Disable Proxy header, since it's an attack vector.
   RequestHeader unset Proxy
 </IfModule>
+

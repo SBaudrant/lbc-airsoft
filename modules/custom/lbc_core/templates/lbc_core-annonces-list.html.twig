@@ -1,0 +1,26 @@
+{{ attach_library('lbc_core/research') }}
+
+<div id="annonces-list">
+
+  <div class="wrapper">
+   	<header>
+      	<a href="javascript:void(0)" class="show-list"><i class="fa fa-th-list"></i></a>
+        <a href="javascript:void(0)" class="hide-list"><i class="fa fa-th"></i></a>
+    </header>
+      <div class="container">
+        {% if annonces|length > 0 %}
+          {% for annonce in annonces %}
+            <div class="box">
+              <a href='{{ path('entity.node.canonical', {'node': annonce.id} ) }}'> {{ annonce.title.value }} </a>
+              <span class="price-green"> {{ annonce.field_prix.value }}€</span>
+            </div>
+          {% endfor %}
+        {% else %}
+          Aucun résultat ne correspond à votre recherche
+        {% endif %}
+
+      </div>
+  </div>
+
+
+</div>

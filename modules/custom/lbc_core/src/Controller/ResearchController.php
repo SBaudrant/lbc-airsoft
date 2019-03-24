@@ -22,6 +22,10 @@ class ResearchController extends ControllerBase {
       $annonce_types = explode( ",", $annonce_types);
       $query->condition('field_annonce_type', $annonce_types, "IN" );
     }
+    
+    if( $cp  = \Drupal::request()->query->get('cp') ){
+      $query->condition('field_code_postal', $cp , "IN" );
+    }
 
     if( $villes  = \Drupal::request()->query->get('villes') ){
       $villes = explode( ",", $villes);
@@ -56,7 +60,6 @@ class ResearchController extends ControllerBase {
     if( $tags  = \Drupal::request()->query->get('type') ){
       $query->condition('field_annonce_tags', $tags , "IN" );
     }
-
 
     // On construit une requête paginée.
     $nids = $query->pager(10)->execute();

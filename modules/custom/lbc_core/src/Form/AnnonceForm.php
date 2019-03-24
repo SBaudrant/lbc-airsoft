@@ -2,11 +2,14 @@
 
 namespace Drupal\lbc_core\Form;
 
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\user\UserInterface;
 
 /**
  * Implements a hello admin form.
@@ -30,7 +33,7 @@ class AnnonceForm extends ConfigFormBase {
   /**
    * {@inheritdoc}.
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, $nid = NULL) {
     // Champ destiné à afficher le résultat du calcul.
     // if (isset($form_state->getRebuildInfo()['result'])) {
     //   $form['result'] = [
@@ -39,9 +42,28 @@ class AnnonceForm extends ConfigFormBase {
     //     '#value' => $this->t('Result: ') . $form_state->getRebuildInfo()['result'],
     //   ];
     // }
+    $title = $body = $prix = $cp = $ville = $departement = $region = $latitude = $longitude = $ville = $tags = $image = $mail = $phone = '';
+    if($nid){
+      $node = Node::load($nid);
+
+      if( in_array("administrator", $this->currentUser()->getRoles()) || $this->currentUser()->id() == $node->getOwner()->id() ){
+        $title = $node->get('title');
+        $body = $node->get('body');
+        $prix = $node->get('field_prix');
+        $cp = $node->get('field_code_postal');
+        $ville = $node->get('field_ville');
+        $departement = $node->get('field_departement');
+        $region = $node->get('field_region');
+        $latitude = $node->get('field_latitude');
+        $longitude = $node->get('field_longitude');
+        $ville = $node->get('field_ville');
+        $tags = $node->get('field_annonce_tags');
+      }
+    }
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title of your ad'),
+      '#default_value'=> $title,
       '#required' => TRUE,
     ];
     $validators = array(
@@ -50,11 +72,13 @@ class AnnonceForm extends ConfigFormBase {
     $form['image'] = [
       '#type' => 'file',
       '#title' => $this->t('Image for your ad'),
+      // TO DO : get default image
       '#upload_validators' => $validators,
     ];
     $form['body'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Description of your ad'),
+      '#default_value'=> $body,
       '#required' => TRUE,
     ];
     $form['prix'] = [
@@ -64,6 +88,7 @@ class AnnonceForm extends ConfigFormBase {
         'callback' => [$this, 'AjaxValidateNumeric'],
         'event' => 'change'
       ],
+      '#default_value'=> $prix,
       '#required' => TRUE,
       '#prefix' => '<span id="error-message-prix"></span>',
     ];
@@ -74,9 +99,9 @@ class AnnonceForm extends ConfigFormBase {
         'callback' => [$this, 'AjaxValidateNumeric'],
         'event' => 'change',
       ],
+      '#default_value'=> $phone,
       '#prefix' => '<span id="error-message-phone"></span>',
     ];
-
     $form['mail'] = [
       '#type' => 'textfield',
       '#title'  => $this->t('Mail'),
@@ -84,6 +109,7 @@ class AnnonceForm extends ConfigFormBase {
         'callback' => [$this, 'AjaxValidateMail'],
         'event' => 'change',
       ],
+      '#default_value'=> $mail,
       '#prefix' => '<span id="error-message-mail"></span>',
     ];
 
@@ -94,6 +120,7 @@ class AnnonceForm extends ConfigFormBase {
       '#attributes' => [
         'id' => ['postal_code']
       ],
+      '#default_value'=> $cp,
       '#prefix' => '<span id="error-message-code-postal"></span>',
     ];
 
@@ -105,6 +132,7 @@ class AnnonceForm extends ConfigFormBase {
         'id' => ['locality'],
         'disabled' => true
       ],
+      '#default_value'=> $ville,
       '#prefix' => '<span id="error-message-ville"></span>',
     ];
 
@@ -116,6 +144,7 @@ class AnnonceForm extends ConfigFormBase {
         'id' => ['administrative_area_level_2'],
         'disabled' => true
       ],
+      '#default_value'=> $departement,
       '#prefix' => '<span id="error-message-departement"></span>',
     ];
     $form['region'] = [
@@ -126,6 +155,7 @@ class AnnonceForm extends ConfigFormBase {
         'id' => ['administrative_area_level_1'],
         'disabled' => true
       ],
+      '#default_value'=> $region,
       '#prefix' => '<span id="error-message-region"></span>',
     ];
     $form['latitude'] = [
@@ -133,9 +163,9 @@ class AnnonceForm extends ConfigFormBase {
       '#required' => TRUE,
       '#attributes' => [
         'id' => ['latitude'],
-        'disabled' => true,
         'class' => ['hidden']
       ],
+      '#default_value'=> $latitude,
       //'#attributes' => array( "class" => array("hidden") ),
     ];
     $form['longitude'] = [
@@ -143,9 +173,9 @@ class AnnonceForm extends ConfigFormBase {
       '#required' => TRUE,
       '#attributes' => [
         'id' => ['longitude'],
-        'disabled' => true,
         'class' => ['hidden']
       ],
+      '#default_value'=> $longitude,
       //'#attributes' => array( "class" => array("hidden") ),
     ];
 
@@ -154,7 +184,6 @@ class AnnonceForm extends ConfigFormBase {
       '#type' => 'submit',
       '#value' => $this->t('Creer votre annonce'),
     ];
-
     return $form;
   }
 
@@ -192,7 +221,6 @@ class AnnonceForm extends ConfigFormBase {
     $response = new AjaxResponse();
 
     $field = $form_state->getTriggeringElement()['#name'];
-    var_dump($field);
     if ( preg_match ( "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" , $field ) )
     {
       $css = ['border' => '2px solid green'];
@@ -213,17 +241,18 @@ class AnnonceForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+
     $title  = $form_state->getValue('title');
     $body   = $form_state->getValue('body');
     $image  = $form_state->getValue('image');
-    $image  = $form_state->getValue('mail');
-    $image  = $form_state->getValue('prix');
-    $image  = $form_state->getValue('codepostal');
-    $image  = $form_state->getValue('ville');
-    $image  = $form_state->getValue('departement');
-    $image  = $form_state->getValue('region');
-    $image  = $form_state->getValue('latitude');
-    $image  = $form_state->getValue('longitude');
+    $mail  = $form_state->getValue('mail');
+    $prix  = $form_state->getValue('prix');
+    $codepostal  = $form_state->getValue('codepostal');
+    $ville  = $form_state->getValue('ville');
+    $departement  = $form_state->getValue('departement');
+    $region  = $form_state->getValue('region');
+    $latitude  = $form_state->getValue('latitude');
+    $longitude  = $form_state->getValue('longitude');
 
 
     // if (!is_numeric($value_1)) {
@@ -241,26 +270,61 @@ class AnnonceForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state, $nid = NULL) {
     // Récupère la valeur des champs.
-    global $user;
-    $data              = $form_state['values'];
+    $user = \Drupal::currentUser();
+    $title        = $form_state->getValue('title') ? $form_state->getValue('title') : '';
+    $image        = $form_state->getValue('image') ? $form_state->getValue('image') : '';
+    $body         = $form_state->getValue('body') ? $form_state->getValue('body') : '';
+    $prix         = $form_state->getValue('prix') ? $form_state->getValue('prix') : '';
+    // $phone        = $form_state->getValue('phone') ? $form_state->getValue('phone') : '';
+    // $mail         = $form_state->getValue('mail') ? $form_state->getValue('mail') : '';
+    $cp           = $form_state->getValue('codepostal') ? $form_state->getValue('codepostal') : '';
+    $ville        = $form_state->getValue('ville') ? $form_state->getValue('ville') : '';
+    $departement  = $form_state->getValue('departement') ? $form_state->getValue('departement') : '';
+    $region       = $form_state->getValue('region') ? $form_state->getValue('region') : '';
+    $latitude     = $form_state->getValue('latitude') ? $form_state->getValue('latitude') : '';
+    $longitude    = $form_state->getValue('longitude') ? $form_state->getValue('longitude') : '';
 
-    $title        = $form_state->getValue('title') ? __filter_html($form_state->getValue('title')) : '';
-    $image        = $form_state->getValue('image') ? __filter_html($form_state->getValue('image')) : '';
-    $body         = $form_state->getValue('body') ? __filter_html($form_state->getValue('body')) : '';
-    $prix         = $form_state->getValue('prix') ? __filter_html($form_state->getValue('prix')) : '';
-    // $phone        = $form_state->getValue('phone') ? __filter_html($form_state->getValue('title')) : '';
-    // $mail         = $form_state->getValue('mail') ? __filter_html($form_state->getValue('title')) : '';
-    $cp           = $form_state->getValue('codepostal') ? __filter_html($form_state->getValue('codepostal')) : '';
-    $ville        = $form_state->getValue('ville') ? __filter_html($form_state->getValue('ville')) : '';
-    $departement  = $form_state->getValue('departement') ? __filter_html($form_state->getValue('departement')) : '';
-    $region       = $form_state->getValue('region') ? __filter_html($form_state->getValue('region')) : '';
-    $latitude     = $form_state->getValue('latitude') ? __filter_html($form_state->getValue('latitude')) : '';
-    $longitude    = $form_state->getValue('longitude') ? __filter_html($form_state->getValue('longitude')) : '';
+    if($nid){
+      $node = Node::load($nid);
+      if($node->getOwner()->id() == \Drupal::currentUser()->id()){
+        $node->set('title' , $title);
+        $node->set('body' , $body);
+        $node->set('field_prix' , $prix);
+        $node->set('field_code_postal' , $cp);
+        $node->set('field_ville' , $ville);
+        $node->set('field_departement' , $departement);
+        $node->set('field_region' , $region);
+        $node->set('field_latitude' , $latitude);
+        $node->set('field_longitude' , $longitude);
+        $node->set('field_ville' , $ville);
+        $node->set('field_annonce_tags', $tags);
+      } else {
+        // TO DO : Set a drupal message to say you are not the creator of this annonce
+      }
+    } else {
+      $node = Node::create([
+        'type' => 'annonce',
+        'uid' => $user->id(),
+        'status' => 1,
+        'comment' => 0,
+        'promote' => 0,
+        'title' => $title,
+        'body' => $body,
+        'field_prix' => $prix,
+        'field_code_postal' => $cp,
+        'field_ville' => $ville,
+        'field_departement' => $departement,
+        'field_region' => $region,
+        'field_latitude' => $latitude,
+        'field_longitude' => $longitude,
+        'field_ville' => $ville,
+        'field_annonce_tags' => $tags,
 
-
-
+      ]);
+    }
+    $node->save();
 
     // On passe le résultat.
     // $form_state->addRebuildInfo('result', $resultat);

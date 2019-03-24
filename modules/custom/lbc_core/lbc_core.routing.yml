@@ -11,3 +11,10 @@ lbc_core.createannonce:
     _form: '\Drupal\lbc_core\Form\AnnonceForm'
   requirements:
     _permission: 'access createannonce'
+lbc_core.editannonce:
+  path: '/annonce/{nid}/edit'
+  defaults:
+    _title: 'Créez votre annonce'
+    _form: '\Drupal\lbc_core\Form\AnnonceForm'
+  requirements:
+    _permission: 'access createannonce'

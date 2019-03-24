@@ -16,7 +16,7 @@
                                 }
                             },
                             onRegionSelected: function(){
-                              $('#research').text(  JSON.stringify( $("#map").vectorMap("get" , "mapObject").getSelectedRegions() ) )
+                              $('#research').val( JSON.stringify( $("#map").vectorMap("get" , "mapObject").getSelectedRegions()).replace(/[\[\]\"]/g, '') )
                             }
                         })
 
